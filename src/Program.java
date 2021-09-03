@@ -30,19 +30,19 @@ public class Program implements Runnable
 
     public void run()
     {
-        var defaultShader = new Shader("/shaders/mainVertex.glsl", "/shaders/mainFragment.glsl");
-        var defaultMaterial = new Material(defaultShader, "/textures/oldpfp.png");
-        var mesh = ModelLoader.LoadModel("resources/models/test.fbx", "/textures/oldpfp.png");
+        Shader defaultShader = new Shader("/shaders/mainVertex.glsl", "/shaders/mainFragment.glsl");
+        Material defaultMaterial = new Material(defaultShader, "/textures/oldpfp.png");
+        Mesh mesh = ModelLoader.LoadModel("resources/models/test.fbx", "/textures/oldpfp.png");
 
         cube = new GameObject(new Vector3f(0, 0, 0), new Vector3f(), new Vector3f(1, 1, 1));
-        var cubeMeshRenderer = new MeshRenderer(mesh, defaultMaterial);
+        MeshRenderer cubeMeshRenderer = new MeshRenderer(mesh, defaultMaterial);
         cubeMeshRenderer.Attach(cube);
 
         cameraGO = new GameObject(new Vector3f(0, 0, 1), new Vector3f(), new Vector3f());
         camera = new Camera();
         camera.Attach(cameraGO);
 
-        var placer = new Placer(mesh, defaultMaterial);
+        Placer placer = new Placer(mesh, defaultMaterial);
         placer.Attach(cameraGO);
 
         window = new Window(TITLE, WIDTH, HEIGHT, camera);

@@ -25,8 +25,8 @@ public class Placer extends Component
 
         if (Input.isButtonDown(GLFW_MOUSE_BUTTON_LEFT))
         {
-            var go = new GameObject(Vector3f.add(this.transform().position, new Vector3f(0, -1.2f, 0)), new Vector3f(), new Vector3f(1, 1, 1));
-            var meshRenderer = new MeshRenderer(meshToPlace, material);
+            GameObject go = new GameObject(Vector3f.add(this.transform().position, new Vector3f(0, -1.2f, 0)), new Vector3f(), new Vector3f(1, 1, 1));
+            MeshRenderer meshRenderer = new MeshRenderer(meshToPlace, material);
             meshRenderer.Attach(go);
         }
     }

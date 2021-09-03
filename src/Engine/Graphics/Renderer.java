@@ -21,7 +21,7 @@ public class Renderer
 
     public static void Render()
     {
-        for (var renderer : meshRenderers) {
+        for (MeshRenderer renderer : meshRenderers) {
             RenderMesh(renderer.transform(), renderer.mesh, renderer.material, window.camera.transform());
         }
     }

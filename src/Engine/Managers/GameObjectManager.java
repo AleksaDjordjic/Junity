@@ -15,9 +15,9 @@ public final class GameObjectManager
     {
         setup = true;
 
-        for (var go: gameObjects)
+        for (GameObject go : (ArrayList<GameObject>)gameObjects.clone())
         {
-            for (var component : go.components)
+            for (Component component : (ArrayList<Component>)go.components.clone())
             {
                 component.Awake();
             }
@@ -26,9 +26,9 @@ public final class GameObjectManager
 
     public static void Setup()
     {
-        for (var go: gameObjects)
+        for (GameObject go : (ArrayList<GameObject>)gameObjects.clone())
         {
-            for (var component : go.components)
+            for (Component component : (ArrayList<Component>)go.components.clone())
             {
                 component.Setup();
             }
@@ -37,9 +37,9 @@ public final class GameObjectManager
 
     public static void Update()
     {
-        for (var go : (ArrayList<GameObject>)gameObjects.clone())
+        for (GameObject go : (ArrayList<GameObject>)gameObjects.clone())
         {
-            for (var component : (ArrayList<Component>)go.components.clone())
+            for (Component component : (ArrayList<Component>)go.components.clone())
             {
                 component.Update();
             }
@@ -48,9 +48,9 @@ public final class GameObjectManager
 
     public static void LateUpdate()
     {
-        for (var go: gameObjects)
+        for (GameObject go : (ArrayList<GameObject>)gameObjects.clone())
         {
-            for (var component : go.components)
+            for (Component component : (ArrayList<Component>)go.components.clone())
             {
                 component.LateUpdate();
             }
@@ -59,9 +59,9 @@ public final class GameObjectManager
 
     public static void FixedUpdate()
     {
-        for (var go: gameObjects)
+        for (GameObject go : (ArrayList<GameObject>)gameObjects.clone())
         {
-            for (var component : go.components)
+            for (Component component : (ArrayList<Component>)go.components.clone())
             {
                 component.FixedUpdate();
             }

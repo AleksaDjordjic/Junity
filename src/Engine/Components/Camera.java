@@ -29,10 +29,10 @@ public class Camera extends Component
 
     public void Update()
     {
-        var newMouseX = Input.getMouseX();
-        var newMouseY = Input.getMouseY();
-        var mouseDeltaX = (float)(newMouseX - oldMouseX);
-        var mouseDeltaY = (float)(newMouseY - oldMouseY);
+        double newMouseX = Input.getMouseX();
+        double newMouseY = Input.getMouseY();
+        float mouseDeltaX = (float)(newMouseX - oldMouseX);
+        float mouseDeltaY = (float)(newMouseY - oldMouseY);
 
         // Third Person
         if (!isFirstPerson && lookAt != null)
