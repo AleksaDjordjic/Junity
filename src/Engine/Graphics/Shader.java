@@ -21,8 +21,12 @@ public class Shader
         System.out.println("");
     }
 
+    private boolean created = false;
     public void Create()
     {
+        if (created) return;
+        created = true;
+        
         programID = glCreateProgram();
 
         // Vertex Shader

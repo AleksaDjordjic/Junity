@@ -1,23 +1,21 @@
+import Engine.Components.*;
 import Engine.IO.*;
 import Engine.Graphics.*;
 import Engine.Math.*;
 import Engine.Objects.*;
-
-import static org.lwjgl.glfw.GLFW.*;
+import Game.Components.Placer;
 
 public class Program implements Runnable
 {
-    public Mesh mesh;
-    public Shader shader;
-    public GameObject gameObject;
-    public Camera camera;
-
     public final String TITLE = "Main Window";
     public final int WIDTH = 1280, HEIGHT = 720;
 
     public Thread main;
     public Window window;
-    public Renderer renderer;
+
+    public GameObject cameraGO;
+    public GameObject cube;
+    public Camera camera;
 
     public static void main(String[] args)
     {
@@ -32,59 +30,22 @@ public class Program implements Runnable
 
     public void run()
     {
-        Init();
-        while (!window.ShouldClose() && !Input.isKeyDown(GLFW_KEY_ESCAPE))
-        {
-            Update();
-            Render();
+        var defaultShader = new Shader("/shaders/mainVertex.glsl", "/shaders/mainFragment.glsl");
+        var defaultMaterial = new Material(defaultShader, "/textures/oldpfp.png");
+        var mesh = ModelLoader.LoadModel("resources/models/test.fbx", "/textures/oldpfp.png");
 
-            if (Input.isKeyDown(GLFW_KEY_F11)) window.setFullscreen(!window.isFullscreen());
-        }
-        Close();
-    }
+        cube = new GameObject(new Vector3f(0, 0, 0), new Vector3f(), new Vector3f(1, 1, 1));
+        var cubeMeshRenderer = new MeshRenderer(mesh, defaultMaterial);
+        cubeMeshRenderer.Attach(cube);
 
-    public void Init()
-    {
-        System.out.println("Initializing...");
-        mesh = ModelLoader.LoadModel("resources/models/test.fbx", "/textures/oldpfp.png");
-        /*new Mesh(new Vertex[] {
-            new Vertex(-0.5f, 0.5f, 0f, 1f, 1f, 1f, 1f, 0f, 0f),
-            new Vertex(-0.5f, -0.5f, 0f, 1f, 1f, 1f, 1f, 0f, 1f),
-            new Vertex(0.5f, -0.5f, 0f, 1f, 1f, 1f, 1f, 1f, 1f),
-            new Vertex(0.5f, 0.5f, 0f, 1f, 1f, 1f, 1f, 1f, 0f),
-        }, new int[] {
-            0, 1, 2,
-            0, 3, 2
-        }, new Material("/textures/oldpfp.png"));*/
-        gameObject = new GameObject(new Vector3f(0, 0, 0), new Vector3f(), new Vector3f(1, 1, 1), mesh);
-        camera = new Camera(new Vector3f(0, 0, 1), new Vector3f());
-        window = new Window(TITLE, WIDTH, HEIGHT);
-        shader = new Shader("/shaders/mainVertex.glsl", "/shaders/mainFragment.glsl");
-        renderer = new Renderer(window, shader);
+        cameraGO = new GameObject(new Vector3f(0, 0, 1), new Vector3f(), new Vector3f());
+        camera = new Camera();
+        camera.Attach(cameraGO);
 
-        camera.isFirstPerson = true;
-        camera.lookAt = gameObject;
+        var placer = new Placer(mesh, defaultMaterial);
+        placer.Attach(cameraGO);
 
-        window.Create();
-        mesh.Create();
-        shader.Create();
-    }
-
-    public void Update()
-    {
-        camera.Update();
-        window.Update();
-    }
-
-    public void Render()
-    {
-        renderer.RenderMesh(gameObject, camera);
-        window.SwapBuffers();
-    }
-
-    public void Close()
-    {
-        window.Close();
-        mesh.Destroy();
+        window = new Window(TITLE, WIDTH, HEIGHT, camera);
+        window.Run();
     }
 }

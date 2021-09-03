@@ -56,6 +56,6 @@ public class ModelLoader
             finalIndices[i * 3 + 2] = face.mIndices().get(2);
         }
 
-        return new Mesh(finalVertices, finalIndices, new Material(texturePath));
+        return new Mesh(finalVertices, finalIndices);
     }
 }

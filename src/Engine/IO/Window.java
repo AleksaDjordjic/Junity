@@ -1,6 +1,9 @@
 package Engine.IO;
 
-import Engine.Math.Matrix4f;
+import Engine.Graphics.*;
+import Engine.Managers.*;
+import Engine.Math.*;
+import Engine.Components.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
 
@@ -23,6 +26,7 @@ public class Window
 
     private Matrix4f projection;
 
+    public Camera camera;
     public Input input;
     private boolean mouseLocked = false;
 
@@ -31,12 +35,13 @@ public class Window
     private float fps = 0.0f;
     private long time = 0;
 
-    public Window(String title, int width, int height)
+    public Window(String title, int width, int height, Camera camera)
     {
         this.title = title;
         this.width = width;
         this.height = height;
         this.projection = Matrix4f.Projection((float)width / (float)height, 90f, 0.001f, 1000f);
+        this.camera = camera;
     }
 
     public String getTitle() { return title; }
@@ -57,6 +62,16 @@ public class Window
         else glfwSetWindowMonitor(window, 0, winPosX[0],winPosY[0], width, height, 0);
     }
     public Matrix4f getProjection() { return projection; }
+
+    private void SwapBuffers()
+    {
+        glfwSwapBuffers(window);
+    }
+    public boolean ShouldClose()
+    {
+        return glfwWindowShouldClose(window);
+    }
+    public void LockMouse(boolean lock)  {glfwSetInputMode(window, GLFW_CURSOR, lock ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL); }
 
     private void CalculateFPS() {
         long currentTime = System.currentTimeMillis();
@@ -87,7 +102,7 @@ public class Window
         glfwSetScrollCallback(window, input.getScrollCallback());
     }
 
-    public void Create()
+    private void Create()
     {
         if (!glfwInit())
         {
@@ -129,8 +144,38 @@ public class Window
         lastFpsUpdate = time;
     }
 
-    public void Update()
+    public void Run()
     {
+        Init();
+        Setup();
+        while (!ShouldClose() && !Input.isKeyDown(GLFW_KEY_ESCAPE))
+        {
+            Update();
+            Render();
+            LateUpdate();
+
+            if (Input.isKeyDown(GLFW_KEY_F11)) setFullscreen(!isFullscreen);
+        }
+        Destroy();
+    }
+
+    private void Init()
+    {
+        System.out.println("Initializing Window...");
+        Renderer.Setup(this);
+        Create();
+    }
+
+    private void Setup()
+    {
+        GameObjectManager.Awake();
+        GameObjectManager.Setup();
+    }
+
+    private void Update()
+    {
+        GameObjectManager.Update();
+
         // Clear Screen
         if (isResized) { glViewport(0, 0, width, height); isResized = false; }
         if (Input.isKeyDown(GLFW_KEY_F9)) { mouseLocked = !mouseLocked; LockMouse(mouseLocked); }
@@ -141,24 +186,25 @@ public class Window
         CalculateFPS();
     }
 
-    public void SwapBuffers()
+    private void LateUpdate()
     {
-        glfwSwapBuffers(window);
+        GameObjectManager.LateUpdate();
+    }
+
+    private void FixedUpdate()
+    {
+        GameObjectManager.FixedUpdate();
+    }
+
+    private void Render()
+    {
+        Renderer.Render();
+        SwapBuffers();
     }
 
     public void Close()
     {
         glfwSetWindowShouldClose(window, true);
-    }
-
-    public boolean ShouldClose()
-    {
-        return glfwWindowShouldClose(window);
-    }
-
-    public void LockMouse(boolean lock)
-    {
-        glfwSetInputMode(window, GLFW_CURSOR, lock ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
     }
 
     public void Destroy()

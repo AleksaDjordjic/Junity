@@ -7,22 +7,31 @@ import static org.lwjgl.opengl.GL46.*;
 
 public class Material
 {
+    private Shader shader;
     private String texturePath;
     private Texture texture;
     private float width, height;
     private int textureID;
 
+    public Shader getShader() { return shader; }
     public float getWidth() { return width; }
     public float getHeight() { return height; }
     public int textureID() {return textureID; }
 
-    public Material(String texturePath)
+    public Material(Shader shader, String texturePath)
     {
+        this.shader = shader;
         this.texturePath = texturePath;
     }
 
+    private boolean created = false;
     public void Create()
     {
+        if (created) return;
+        created = true;
+
+        shader.Create();
+
         try
         {
             String[] pathDotSplit = texturePath.split("[.]");

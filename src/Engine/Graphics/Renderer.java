@@ -1,39 +1,46 @@
 package Engine.Graphics;
 
+import Engine.Components.*;
 import Engine.Math.*;
 import Engine.Objects.*;
 import Engine.IO.*;
+
+import java.util.*;
 
 import static org.lwjgl.opengl.GL46.*;
 
 public class Renderer
 {
-    private Window window;
-    private Shader shader;
+    public static List<MeshRenderer> meshRenderers = new ArrayList<>();
+    private static Window window;
 
-    public Renderer(Window window, Shader shader)
+    public static void Setup(Window window)
     {
-        this.window = window;
-        this.shader = shader;
+        Renderer.window = window;
     }
 
-    public void RenderMesh(GameObject object, Camera camera)
+    public static void Render()
     {
-        Mesh mesh = object.getMesh();
-
+        for (var renderer : meshRenderers) {
+            RenderMesh(renderer.transform(), renderer.mesh, renderer.material, window.camera.transform());
+        }
+    }
+    
+    private static void RenderMesh(Transform transform, Mesh mesh, Material material, Transform camera)
+    {
         glBindVertexArray(mesh.getVAO());
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.getIBO());
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mesh.getMaterial().textureID());
-        shader.Bind();
-        shader.SetUniform("model", Matrix4f.Transform(object.getPosition(), object.getRotation(), object.getScale()));
-        shader.SetUniform("view", Matrix4f.View(camera.position, camera.rotation));
-        shader.SetUniform("projection", window.getProjection());
+        glBindTexture(GL_TEXTURE_2D, material.textureID());
+        material.getShader().Bind();
+        material.getShader().SetUniform("model", Matrix4f.Transform(transform.position, transform.rotation, transform.scale));
+        material.getShader().SetUniform("view", Matrix4f.View(camera.position, camera.rotation));
+        material.getShader().SetUniform("projection", window.getProjection());
         glDrawElements(GL_TRIANGLES, mesh.getIndices().length, GL_UNSIGNED_INT, 0);
-        shader.Unbind();
+        material.getShader().Unbind();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         glDisableVertexAttribArray(2);
         glDisableVertexAttribArray(1);

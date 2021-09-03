@@ -11,29 +11,28 @@ public class Mesh
 {
     private Vertex[] vertices;
     private int[] indices;
-    private Material material;
 
     private int vao, pbo, ibo, cbo, tbo;
 
     public Vertex[] getVertices() { return vertices; }
     public int[] getIndices() { return indices; }
-    public Material getMaterial() { return material; }
     public int getVAO() { return vao; }
     public int getPBO() { return pbo; }
     public int getIBO() { return ibo; }
     public int getCBO() { return cbo; }
     public int getTBO() { return tbo; }
 
-    public Mesh(Vertex[] vertices, int[] indices, Material material)
+    public Mesh(Vertex[] vertices, int[] indices)
     {
         this.vertices = vertices;
         this.indices = indices;
-        this.material = material;
     }
 
+    private boolean created = false;
     public void Create()
     {
-        material.Create();
+        if (created) return;
+        created = true;
 
         vao = glGenVertexArrays();
         glBindVertexArray(vao);
@@ -120,7 +119,5 @@ public class Mesh
         glDeleteBuffers(tbo);
 
         glDeleteVertexArrays(vao);
-
-        material.Destroy();
     }
 }
