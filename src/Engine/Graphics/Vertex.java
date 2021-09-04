@@ -12,6 +12,7 @@ public class Vertex
     public Vector3f getPosition() { return position; }
     public Vector4f getColor() { return color; }
     public Vector2f getTexture() { return texture; }
+    public Vector3f getNormal() { return normal; }
 
     public Vertex()
     {

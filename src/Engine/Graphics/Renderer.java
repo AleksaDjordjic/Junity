@@ -1,6 +1,7 @@
 package Engine.Graphics;
 
 import Engine.Components.*;
+import Engine.Managers.LightManager;
 import Engine.Math.*;
 import Engine.Objects.*;
 import Engine.IO.*;
@@ -32,16 +33,28 @@ public class Renderer
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
         glEnableVertexAttribArray(2);
+        glEnableVertexAttribArray(3);
+
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.getIBO());
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, material.textureID());
+
         material.getShader().Bind();
         material.getShader().SetUniform("model", Matrix4f.Transform(transform.position, transform.rotation, transform.scale));
         material.getShader().SetUniform("view", Matrix4f.View(camera.position, camera.rotation));
         material.getShader().SetUniform("projection", window.getProjection());
+        if(!LightManager.lights.isEmpty())
+        {
+            Light light = LightManager.lights.get(0);
+            material.getShader().SetUniform("lightPosition", light.transform().position);
+            material.getShader().SetUniform("lightColor", light.color);
+        }
+
         glDrawElements(GL_TRIANGLES, mesh.getIndices().length, GL_UNSIGNED_INT, 0);
         material.getShader().Unbind();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+        glEnableVertexAttribArray(3);
         glDisableVertexAttribArray(2);
         glDisableVertexAttribArray(1);
         glDisableVertexAttribArray(0);

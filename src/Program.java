@@ -3,7 +3,7 @@ import Engine.IO.*;
 import Engine.Graphics.*;
 import Engine.Math.*;
 import Engine.Objects.*;
-import Game.Components.Placer;
+import Game.Components.*;
 
 public class Program implements Runnable
 {
@@ -13,8 +13,10 @@ public class Program implements Runnable
     public Thread main;
     public Window window;
 
+    public GameObject lightGO;
     public GameObject cameraGO;
     public GameObject cube;
+    public Light light;
     public Camera camera;
 
     public static void main(String[] args)
@@ -41,6 +43,10 @@ public class Program implements Runnable
         cameraGO = new GameObject(new Vector3f(0, 0, 1), new Vector3f(), new Vector3f());
         camera = new Camera();
         camera.Attach(cameraGO);
+
+        lightGO = new GameObject(new Vector3f(), new Vector3f(), new Vector3f());
+        light = new Light(1, new Vector3f(1, 1, 1));
+        light.Attach(lightGO);
 
         Placer placer = new Placer(mesh, defaultMaterial);
         placer.Attach(cameraGO);

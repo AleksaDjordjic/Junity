@@ -20,7 +20,7 @@ public class Camera extends Component
     private float distance = 2.0f;
     private float horizontalAngle = 0, verticalAngle = 0;
 
-    public Camera() { }
+    public Camera() { if (Camera.main == null) Camera.main = this; }
 
     public Camera(boolean main)
     {

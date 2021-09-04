@@ -12,7 +12,7 @@ public class Mesh
     private Vertex[] vertices;
     private int[] indices;
 
-    private int vao, pbo, ibo, cbo, tbo;
+    private int vao, pbo, ibo, cbo, tbo, nbo;
 
     public Vertex[] getVertices() { return vertices; }
     public int[] getIndices() { return indices; }
@@ -21,6 +21,7 @@ public class Mesh
     public int getIBO() { return ibo; }
     public int getCBO() { return cbo; }
     public int getTBO() { return tbo; }
+    public int getNBO() { return nbo; }
 
     public Mesh(Vertex[] vertices, int[] indices)
     {
@@ -47,13 +48,6 @@ public class Mesh
             positionData[i * 3 + 2] = position.z;
         }
         positionBuffer.put(positionData).flip();
-
-        pbo = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, pbo);
-        glBufferData(GL_ARRAY_BUFFER, positionBuffer, GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
         pbo = StoreData(positionBuffer, 0, 3);
 
         // Color
@@ -67,7 +61,6 @@ public class Mesh
             colorData[i * 4 + 3] = color.w;
         }
         colorBuffer.put(colorData).flip();
-
         cbo = StoreData(colorBuffer, 1, 4);
 
         // Texture
@@ -79,12 +72,23 @@ public class Mesh
             textureData[i * 2 + 1] = texture.y;
         }
         textureBuffer.put(textureData).flip();
-
         tbo = StoreData(textureBuffer, 2, 2);
 
         // Indices
         IntBuffer indicesBuffer = MemoryUtil.memAllocInt(indices.length);
         indicesBuffer.put(indices).flip();
+
+        // Normals
+        FloatBuffer normalsBuffer = MemoryUtil.memAllocFloat(vertices.length * 3);
+        float[] normalsData = new float[vertices.length * 3];
+        for (int i = 0; i < vertices.length; i++) {
+            Vector3f normal =  vertices[i].getNormal();
+            normalsData[i * 3] = normal.x;
+            normalsData[i * 3 + 1] = normal.y;
+            normalsData[i * 3 + 2] = normal.z;
+        }
+        normalsBuffer.put(normalsData).flip();
+        nbo = StoreData(normalsBuffer, 3, 3);
 
         ibo = glGenBuffers();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
@@ -117,6 +121,7 @@ public class Mesh
         glDeleteProgram(cbo);
         glDeleteBuffers(ibo);
         glDeleteBuffers(tbo);
+        glDeleteBuffers(nbo);
 
         glDeleteVertexArrays(vao);
     }
