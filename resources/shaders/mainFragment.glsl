@@ -2,10 +2,10 @@
 
 in vec4 passColor;
 in vec2 passTexture;
-
 in vec3 surfaceNormal;
 in vec3 toLightVector;
 in vec3 toCameraVector;
+in float visibility;
 
 out vec4 outColor;
 
@@ -13,6 +13,7 @@ uniform sampler2D tex;
 uniform vec3 lightColor;
 uniform float shineDamper;
 uniform float reflectivity;
+uniform vec3 skyColor;
 
 void main()
 {
@@ -32,5 +33,6 @@ void main()
     float dampedFactor = pow(specularFactor, shineDamper);
     vec3 finalSpecular = dampedFactor * lightColor * reflectivity;
 
-    outColor = vec4(diffuse, 0.0) * texture(tex, passTexture) * passColor + vec4(finalSpecular, 1.0);
+    vec4 finalColor = vec4(diffuse, 0.0) * texture(tex, passTexture) * passColor + vec4(finalSpecular, 1.0);
+    outColor = mix(vec4(skyColor, 1.0), finalColor, visibility);
 }

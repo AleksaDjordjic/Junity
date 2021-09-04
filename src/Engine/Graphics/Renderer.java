@@ -52,6 +52,7 @@ public class Renderer
         }
         material.getShader().SetUniform("shineDamper", material.shineDamper);
         material.getShader().SetUniform("reflectivity", material.reflectivity);
+        material.getShader().SetUniform("skyColor", LightManager.skyColor);
 
         glDrawElements(GL_TRIANGLES, mesh.getIndices().length, GL_UNSIGNED_INT, 0);
         material.getShader().Unbind();

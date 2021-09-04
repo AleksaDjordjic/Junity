@@ -182,7 +182,7 @@ public class Window
         // Clear Screen
         if (isResized) { glViewport(0, 0, width, height); isResized = false; }
         if (Input.isKeyDown(GLFW_KEY_F9)) { mouseLocked = !mouseLocked; LockMouse(mouseLocked); }
-        glClearColor(.529f, .808f, .992f, 1f);
+        glClearColor(LightManager.skyColor.x, LightManager.skyColor.y, LightManager.skyColor.z, 1f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         glfwPollEvents();

@@ -40,7 +40,11 @@ public class Material
             String[] pathDotSplit = texturePath.split("[.]");
             String extension = pathDotSplit[pathDotSplit.length - 1];
 
-            texture = TextureLoader.getTexture(extension, Material.class.getResourceAsStream(texturePath), SGL.GL_NEAREST);
+            texture = TextureLoader.getTexture(extension, Material.class.getResourceAsStream(texturePath));
+            glGenerateMipmap(GL_TEXTURE_2D);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_LOD_BIAS, -1);
+
             width = texture.getWidth();
             height = texture.getHeight();
             textureID = texture.getTextureID();
