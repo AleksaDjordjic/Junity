@@ -130,8 +130,11 @@ public class Window
         winPosY[0] = (videoMode.height() - height) / 2;
         glfwSetWindowPos(window, winPosX[0], winPosY[0]);
         glfwMakeContextCurrent(window);
+
         GL.createCapabilities();
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        glEnable(GL_BACK);
 
         CreateCallbacks();
 
