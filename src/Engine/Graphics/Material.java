@@ -13,6 +13,9 @@ public class Material
     private float width, height;
     private int textureID;
 
+    public float reflectivity = 0;
+     public float shineDamper = 1;
+
     public Shader getShader() { return shader; }
     public float getWidth() { return width; }
     public float getHeight() { return height; }

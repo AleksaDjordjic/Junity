@@ -34,6 +34,7 @@ public class Program implements Runnable
     {
         Shader defaultShader = new Shader("/shaders/mainVertex.glsl", "/shaders/mainFragment.glsl");
         Material defaultMaterial = new Material(defaultShader, "/textures/oldpfp.png");
+        defaultMaterial.reflectivity = 0.5f;
         Mesh mesh = ModelLoader.LoadModel("resources/models/test.fbx", "/textures/oldpfp.png");
 
         cube = new GameObject(new Vector3f(0, 0, 0), new Vector3f(), new Vector3f(1, 1, 1));

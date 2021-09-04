@@ -40,15 +40,18 @@ public class Renderer
         glBindTexture(GL_TEXTURE_2D, material.textureID());
 
         material.getShader().Bind();
-        material.getShader().SetUniform("model", Matrix4f.Transform(transform.position, transform.rotation, transform.scale));
+        material.getShader().SetUniform("transform", Matrix4f.Transform(transform.position, transform.rotation, transform.scale));
         material.getShader().SetUniform("view", Matrix4f.View(camera.position, camera.rotation));
         material.getShader().SetUniform("projection", window.getProjection());
+
         if(!LightManager.lights.isEmpty())
         {
             Light light = LightManager.lights.get(0);
             material.getShader().SetUniform("lightPosition", light.transform().position);
             material.getShader().SetUniform("lightColor", light.color);
         }
+        material.getShader().SetUniform("shineDamper", material.shineDamper);
+        material.getShader().SetUniform("reflectivity", material.reflectivity);
 
         glDrawElements(GL_TRIANGLES, mesh.getIndices().length, GL_UNSIGNED_INT, 0);
         material.getShader().Unbind();

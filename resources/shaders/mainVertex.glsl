@@ -9,20 +9,22 @@ out vec4 passColor;
 out vec2 passTexture;
 out vec3 surfaceNormal;
 out vec3 toLightVector;
+out vec3 toCameraVector;
 
-uniform mat4 model;
+uniform mat4 transform;
 uniform mat4 view;
 uniform mat4 projection;
 uniform vec3 lightPosition;
 
 void main()
 {
-    vec4 worldPosition = model * vec4(position, 1.0);
+    vec4 worldPosition = transform * vec4(position, 1.0);
 
     gl_Position = projection * view * worldPosition;
 
     passColor = color;
     passTexture = texture;
-    surfaceNormal = (model * vec4(normal, 0.0)).xyz;
+    surfaceNormal = (transform * vec4(normal, 0.0)).xyz;
     toLightVector = lightPosition - worldPosition.xyz;
+    toCameraVector = (inverse(view) * vec4(0, 0, 0, 1.0)).xyz - worldPosition.xyz;
 }
