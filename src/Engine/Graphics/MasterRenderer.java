@@ -10,19 +10,20 @@ import java.util.*;
 
 import static org.lwjgl.opengl.GL46.*;
 
-public class Renderer
+public final class MasterRenderer
 {
     public static List<MeshRenderer> meshRenderers = new ArrayList<>();
     private static Window window;
 
     public static void Setup(Window window)
     {
-        Renderer.window = window;
+        MasterRenderer.window = window;
     }
 
     public static void Render()
     {
-        for (MeshRenderer renderer : meshRenderers) {
+        for (MeshRenderer renderer : meshRenderers)
+        {
             RenderMesh(renderer.transform(), renderer.mesh, renderer.material, window.camera.transform());
         }
     }
@@ -37,7 +38,7 @@ public class Renderer
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.getIBO());
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, material.textureID());
+        glBindTexture(GL_TEXTURE_2D, material.getTextureID());
 
         material.getShader().Bind();
         material.getShader().SetUniform("transform", Matrix4f.Transform(transform.position, transform.rotation, transform.scale));

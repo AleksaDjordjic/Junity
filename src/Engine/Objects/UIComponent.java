@@ -1,22 +1,23 @@
 package Engine.Objects;
 
+import Engine.GUI.RectTransform;
 import Engine.Managers.GameObjectManager;
 
-public class Component implements IComponent
+public class UIComponent implements IComponent
 {
     private GameObject attachedGameObject;
-    private Transform transform;
+    private RectTransform rectTransform;
 
     public GameObject gameObject() { return attachedGameObject; }
-    public Transform transform() { return transform; }
+    public RectTransform rectTransform() { return rectTransform; }
 
-    public Component() { }
+    public UIComponent() { }
 
     public void Attach(GameObject gameObject)
     {
         attachedGameObject = gameObject;
         gameObject.components.add(this);
-        transform = gameObject.transform;
+        rectTransform = gameObject.rectTransform;
 
         if (GameObjectManager.isSetup())
         {

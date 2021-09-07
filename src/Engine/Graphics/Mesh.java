@@ -1,7 +1,7 @@
 package Engine.Graphics;
 
 import Engine.Math.*;
-import org.lwjgl.system.MemoryUtil;
+import org.lwjgl.system.*;
 
 import java.nio.*;
 
@@ -33,6 +33,48 @@ public class Mesh
     public void Create()
     {
         if (created) return;
+        CreateSimple();
+
+        // Texture
+        FloatBuffer textureBuffer = MemoryUtil.memAllocFloat(vertices.length * 2);
+        float[] textureData = new float[vertices.length * 2];
+        for (int i = 0; i < vertices.length; i++) {
+            Vector2f texture =  vertices[i].getTexture();
+            textureData[i * 2] = texture.x;
+            textureData[i * 2 + 1] = texture.y;
+        }
+        textureBuffer.put(textureData).flip();
+        tbo = StoreData(textureBuffer, 1, 2);
+
+        // Color
+        FloatBuffer colorBuffer = MemoryUtil.memAllocFloat(vertices.length * 4);
+        float[] colorData = new float[vertices.length * 4];
+        for (int i = 0; i < vertices.length; i++) {
+            Vector4f color =  vertices[i].getColor();
+            colorData[i * 4] = color.x;
+            colorData[i * 4 + 1] = color.y;
+            colorData[i * 4 + 2] = color.z;
+            colorData[i * 4 + 3] = color.w;
+        }
+        colorBuffer.put(colorData).flip();
+        cbo = StoreData(colorBuffer, 2, 4);
+
+        // Normals
+        FloatBuffer normalsBuffer = MemoryUtil.memAllocFloat(vertices.length * 3);
+        float[] normalsData = new float[vertices.length * 3];
+        for (int i = 0; i < vertices.length; i++) {
+            Vector3f normal =  vertices[i].getNormal();
+            normalsData[i * 3] = normal.x;
+            normalsData[i * 3 + 1] = normal.y;
+            normalsData[i * 3 + 2] = normal.z;
+        }
+        normalsBuffer.put(normalsData).flip();
+        nbo = StoreData(normalsBuffer, 3, 3);
+    }
+
+    public void CreateSimple()
+    {
+        if (created) return;
         created = true;
 
         vao = glGenVertexArrays();
@@ -50,46 +92,9 @@ public class Mesh
         positionBuffer.put(positionData).flip();
         pbo = StoreData(positionBuffer, 0, 3);
 
-        // Color
-        FloatBuffer colorBuffer = MemoryUtil.memAllocFloat(vertices.length * 4);
-        float[] colorData = new float[vertices.length * 4];
-        for (int i = 0; i < vertices.length; i++) {
-            Vector4f color =  vertices[i].getColor();
-            colorData[i * 4] = color.x;
-            colorData[i * 4 + 1] = color.y;
-            colorData[i * 4 + 2] = color.z;
-            colorData[i * 4 + 3] = color.w;
-        }
-        colorBuffer.put(colorData).flip();
-        cbo = StoreData(colorBuffer, 1, 4);
-
-        // Texture
-        FloatBuffer textureBuffer = MemoryUtil.memAllocFloat(vertices.length * 2);
-        float[] textureData = new float[vertices.length * 2];
-        for (int i = 0; i < vertices.length; i++) {
-            Vector2f texture =  vertices[i].getTexture();
-            textureData[i * 2] = texture.x;
-            textureData[i * 2 + 1] = texture.y;
-        }
-        textureBuffer.put(textureData).flip();
-        tbo = StoreData(textureBuffer, 2, 2);
-
         // Indices
         IntBuffer indicesBuffer = MemoryUtil.memAllocInt(indices.length);
         indicesBuffer.put(indices).flip();
-
-        // Normals
-        FloatBuffer normalsBuffer = MemoryUtil.memAllocFloat(vertices.length * 3);
-        float[] normalsData = new float[vertices.length * 3];
-        for (int i = 0; i < vertices.length; i++) {
-            Vector3f normal =  vertices[i].getNormal();
-            normalsData[i * 3] = normal.x;
-            normalsData[i * 3 + 1] = normal.y;
-            normalsData[i * 3 + 2] = normal.z;
-        }
-        normalsBuffer.put(normalsData).flip();
-        nbo = StoreData(normalsBuffer, 3, 3);
-
         ibo = glGenBuffers();
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);

@@ -1,6 +1,7 @@
 package Game.Components;
 
 import Engine.Components.*;
+import Engine.GUI.GUIRenderer;
 import Engine.IO.*;
 import Engine.Managers.*;
 import Engine.Math.*;

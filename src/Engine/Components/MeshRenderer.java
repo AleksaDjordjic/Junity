@@ -21,6 +21,6 @@ public class MeshRenderer extends Component
     {
         mesh.Create();
         material.Create();
-        Renderer.meshRenderers.add(this);
+        MasterRenderer.meshRenderers.add(this);
     }
 }

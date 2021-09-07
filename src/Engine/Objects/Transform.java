@@ -12,7 +12,14 @@ public class Transform
     {
         position = new Vector3f();
         rotation = new Vector3f();
-        scale = new Vector3f();
+        scale = new Vector3f(1, 1, 1);
+    }
+
+    public Transform(Vector3f position, Vector3f rotation)
+    {
+        this.position = position;
+        this.rotation = rotation;
+        this.scale = new Vector3f(1, 1, 1);
     }
 
     public Transform(Vector3f position, Vector3f rotation, Vector3f scale)

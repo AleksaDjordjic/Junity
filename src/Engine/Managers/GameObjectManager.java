@@ -17,7 +17,7 @@ public final class GameObjectManager
 
         for (GameObject go : (ArrayList<GameObject>)gameObjects.clone())
         {
-            for (Component component : (ArrayList<Component>)go.components.clone())
+            for (IComponent component : (ArrayList<IComponent>)go.components.clone())
             {
                 component.Awake();
             }
@@ -28,7 +28,7 @@ public final class GameObjectManager
     {
         for (GameObject go : (ArrayList<GameObject>)gameObjects.clone())
         {
-            for (Component component : (ArrayList<Component>)go.components.clone())
+            for (IComponent component : (ArrayList<IComponent>)go.components.clone())
             {
                 component.Setup();
             }
@@ -39,7 +39,7 @@ public final class GameObjectManager
     {
         for (GameObject go : (ArrayList<GameObject>)gameObjects.clone())
         {
-            for (Component component : (ArrayList<Component>)go.components.clone())
+            for (IComponent component : (ArrayList<IComponent>)go.components.clone())
             {
                 component.Update();
             }
@@ -50,7 +50,7 @@ public final class GameObjectManager
     {
         for (GameObject go : (ArrayList<GameObject>)gameObjects.clone())
         {
-            for (Component component : (ArrayList<Component>)go.components.clone())
+            for (IComponent component : (ArrayList<IComponent>)go.components.clone())
             {
                 component.LateUpdate();
             }
@@ -61,7 +61,7 @@ public final class GameObjectManager
     {
         for (GameObject go : (ArrayList<GameObject>)gameObjects.clone())
         {
-            for (Component component : (ArrayList<Component>)go.components.clone())
+            for (IComponent component : (ArrayList<IComponent>)go.components.clone())
             {
                 component.FixedUpdate();
             }

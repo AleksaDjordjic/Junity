@@ -52,6 +52,14 @@ public class Program implements Runnable
         Placer placer = new Placer(mesh, defaultMaterial);
         placer.Attach(cameraGO);
 
+        // GUI
+        Shader guiShader = new Shader("/shaders/ui/vertex.glsl", "/shaders/ui/fragment.glsl");
+        Material guiMaterial = new Material(guiShader, "/textures/oldpfp.png");
+
+        GameObject guiElementGO = new GameObject(new Vector2f(0, 0), new Vector2f(1, 1));
+        GUIElement guiElement = new GUIElement(guiMaterial);
+        guiElement.Attach(guiElementGO);
+
         window = new Window(TITLE, WIDTH, HEIGHT, camera);
         window.Run();
     }

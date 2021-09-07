@@ -39,6 +39,17 @@ public class Matrix4f
         return result;
     }
 
+    public static Matrix4f Translate(Vector2f translate)
+    {
+        Matrix4f result = Matrix4f.Identity();
+
+        result.Set(3, 0, translate.x);
+        result.Set(3, 1, translate.y);
+        result.Set(3, 2, 0);
+
+        return result;
+    }
+
     public static Matrix4f Translate(Vector3f translate)
     {
         Matrix4f result = Matrix4f.Identity();
@@ -71,6 +82,17 @@ public class Matrix4f
         return result;
     }
 
+    public static Matrix4f Scale(Vector2f scalar)
+    {
+        Matrix4f result = Matrix4f.Identity();
+
+        result.Set(0, 0, scalar.x);
+        result.Set(1, 1, scalar.y);
+        result.Set(2, 2, 1);
+
+        return result;
+    }
+
     public static Matrix4f Scale(Vector3f scalar)
     {
         Matrix4f result = Matrix4f.Identity();
@@ -99,6 +121,19 @@ public class Matrix4f
         }
 
         return result;
+    }
+
+    public static Matrix4f Transform(Vector2f position, Vector2f scale)
+    {
+        Matrix4f translationMatrix = Matrix4f.Translate(position);
+        Matrix4f rotationXMatrix = Matrix4f.Rotate(0, Vector3f.Right);
+        Matrix4f rotationYMatrix = Matrix4f.Rotate(0, Vector3f.Up);
+        Matrix4f rotationZMatrix = Matrix4f.Rotate(0, Vector3f.Forward);
+        Matrix4f scaleMatrix = Matrix4f.Scale(scale);
+
+        Matrix4f rotationMatrix = Matrix4f.multiply(rotationXMatrix, Matrix4f.multiply(rotationYMatrix, rotationZMatrix));
+
+        return Matrix4f.multiply(translationMatrix, Matrix4f.multiply(rotationMatrix, scaleMatrix));
     }
 
     public static Matrix4f Transform(Vector3f position, Vector3f rotation, Vector3f scale)

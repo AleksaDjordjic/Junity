@@ -19,7 +19,7 @@ public class Material
     public Shader getShader() { return shader; }
     public float getWidth() { return width; }
     public float getHeight() { return height; }
-    public int textureID() {return textureID; }
+    public int getTextureID() {return textureID; }
 
     public Material(Shader shader, String texturePath)
     {

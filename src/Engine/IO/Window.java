@@ -1,5 +1,6 @@
 package Engine.IO;
 
+import Engine.GUI.GUIRenderer;
 import Engine.Graphics.*;
 import Engine.Managers.*;
 import Engine.Math.*;
@@ -95,6 +96,8 @@ public class Window
             }
         };
 
+        glfwSetWindowSizeCallback(window, sizeCallback);
+
         // Input Callbacks
         glfwSetKeyCallback(window, input.getKeyboardCallback());
         glfwSetCursorPosCallback(window, input.getMouseMoveCallback());
@@ -138,6 +141,8 @@ public class Window
 
         CreateCallbacks();
 
+        GUIRenderer.Setup(this);
+
         glfwShowWindow(window);
 
         // Vsync on
@@ -165,7 +170,7 @@ public class Window
     private void Init()
     {
         System.out.println("Initializing Window...");
-        Renderer.Setup(this);
+        MasterRenderer.Setup(this);
         Create();
     }
 
@@ -201,7 +206,8 @@ public class Window
 
     private void Render()
     {
-        Renderer.Render();
+        MasterRenderer.Render();
+        GUIRenderer.Render();
         SwapBuffers();
     }
 
